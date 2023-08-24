@@ -1,24 +1,22 @@
 #include "monty.h"
+
 /**
- * f_pop - prints the top
- * @head: stack head
- * @counter: line_number
- * Return: no return
-*/
-void f_pop(stack_t **head, unsigned int counter)
+ * monty_pop - Removes the top element of a stack_t linked list.
+ * @stack: A pointer to the top mode node of a stack_t linked list.
+ * @line_number: The line number of a Monty bytecodes file.
+ */
+void monty_pop(stack_t **stack, unsigned int line_number)
 {
-	stack_t *h;
+	stack_t *top = (*stack)->next;
 
-	if (*head == NULL)
+	if (top == NULL)
 	{
-		fprintf(stderr, "L%d: can't pop an empty stack\n", counter);
-		fclose(bus.file);
-		free(bus.content);
-		free_stack(*head);
-		exit(EXIT_FAILURE);
+		set_op_tok_error(pop_error(line_number));
+		return;
 	}
-	h = *head;
-	*head = h->next;
-	free(h);
-}
 
+	(*stack)->next = top->next;
+	if (top->next != NULL)
+		top->next->prev = *stack;
+	free(top);
+}
